@@ -9,16 +9,16 @@
   >
     <StarsCanvas />
 
-    <Navbar class="relative z-20" /> <main class="pt-32 px-4 relative z-10"> <Hero />
-      <slot />
-    </main>
-
+    <Navbar class="relative z-20" />  <Hero />
+      <Motion />
     <div></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import Motion from '~/components/Motion.vue';
+
 // StarsCanvas و Hero به طور خودکار توسط Nuxt ایمپورت می‌شوند.
 
 const isDark = ref(true);

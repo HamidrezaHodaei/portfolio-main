@@ -20,12 +20,8 @@
       @click="handleToggle"
       class="toggle-button"
     >
-      <div 
-        class="btn-outline btn-outline-1"
-      ></div>
-      <div 
-        class="btn-outline btn-outline-2"
-      ></div>
+      <div class="btn-outline btn-outline-1"></div>
+      <div class="btn-outline btn-outline-2"></div>
       
       <!-- Hamburger Icon -->
       <div class="icon-wrapper">
@@ -60,17 +56,18 @@
       <!-- Primary Menu -->
       <div class="primary-menu">
         <div 
-          v-for="(item, index) in primaryMenu" 
+          v-for="item in primaryMenu" 
           :key="item.id"
           class="menu-item-wrapper"
         >
           <NuxtLink 
             :to="item.link"
-            class="menu-link primary-link"
+            class="menu-link primary-link hover-effect-text"
             @click="handleToggle"
           >
             <span v-if="item.number" class="link-number">{{ item.number }}</span>
-            <span>{{ item.text }}</span>
+            <span class="text-main">{{ item.text }}</span>
+            <span class="text-hover">{{ item.text }}</span>
           </NuxtLink>
         </div>
       </div>
@@ -161,7 +158,7 @@ const primaryMenu = [
 const secondaryMenuTop = [
   { id: 1, text: 'Speaker', link: '/speaker' },
   { id: 2, text: 'Blog', link: '/blog' },
-  { id: 3, text: 'Contact', link: '/contact' },
+  { id: 3, text: 'Form', link: '/form' },
 ]
 
 const socialLinks = [
@@ -176,14 +173,14 @@ const socialLinks = [
   { 
     id: 2, 
     text: 'LinkedIn', 
-    link: 'https://linkedin.com/in/hodaeiihamiderza',
+    link: 'https://linkedin.com/in/hamidrezahoaei',
     icon: `<svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
     </svg>`
   },
   { 
     id: 3, 
-    text: 'Email', 
+    text: 'Email',
     link: 'mailto:hodaeiihamidreza@gmail.com',
     icon: `<svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z"/>
@@ -192,7 +189,7 @@ const socialLinks = [
 ]
 
 const secondaryMenuBottom = [
-  { id: 1, text: 'Credits', link: '/credits' },
+  { id: 1, text: '© 2025 Hamidreza Hodaei. All rights reserved.', link: '/copyright' },
 ]
 
 // Handle Toggle
@@ -293,7 +290,7 @@ onUnmounted(() => {
 /* Global Styles */
 .menu-wrapper {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   background-color: #e5e3dc;
   color: #0a0a0a;
   position: relative;
@@ -303,7 +300,7 @@ onUnmounted(() => {
 /* Hero Title */
 .hero-title {
   position: absolute;
-  top: 50vh;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90%;
@@ -346,7 +343,7 @@ onUnmounted(() => {
   justify-content: center;
   background: #0a0a0a;
   border-radius: 0.15em;
-  box-shadow: 0 ;
+  box-shadow: 0;
   line-height: 1.2;
 }
 
@@ -355,27 +352,13 @@ onUnmounted(() => {
 }
 
 @keyframes show {
-  0% {
-    margin-top: -2.5em;
-  }
-  10% {
-    margin-top: -2.5em;
-  }
-  20% {
-    margin-top: -1.25em;
-  }
-  45% {
-    margin-top: -1.25em;
-  }
-  55% {
-    margin-top: 0em;
-  }
-  95% {
-    margin-top: 0em;
-  }
-  100% {
-    margin-top: -2.5em;
-  }
+  0% { margin-top: -2.5em; }
+  10% { margin-top: -2.5em; }
+  20% { margin-top: -1.25em; }
+  45% { margin-top: -1.25em; }
+  55% { margin-top: 0em; }
+  95% { margin-top: 0em; }
+  100% { margin-top: -2.5em; }
 }
 
 /* Toggle Button - Always Fixed */
@@ -555,6 +538,40 @@ onUnmounted(() => {
   line-height: 1;
   font-family: 'Playfair Display', serif;
   color: #e2e2dc;
+}
+
+/* Hover Effect for Primary Links */
+.hover-effect-text {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.text-main,
+.text-hover {
+  transition: all cubic-bezier(.1,.5,.5,1) 0.4s;
+}
+
+.text-hover {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  color: #0a0a0a;
+  clip-path: polygon(0 50%, 100% 50%, 100% 50%, 0 50%);
+  transform-origin: center;
+  display: flex;
+  align-items: center;
+  padding-left: 0;
+}
+
+.link-number ~ .text-hover {
+  padding-left: calc(0.25em * 4 + 1.5rem);
+}
+
+.hover-effect-text:hover .text-hover {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
 .link-number {
