@@ -1,0 +1,29 @@
+{
+  "menu": {
+    "title": "Menu",
+    "open": "Menu",
+    "home": "Home",
+    "blog": "Blog",
+    "about": "About",
+    "location": {
+      "title": "Where am I?",
+      "address": "123 my address"
+    },
+    "contact": {
+      "title": "Contact",
+      "email": "andrewwoan@gmail.com"
+    },
+    "social": {
+      "title": "Follow me",
+      "twitter": "twitter",
+      "youtube": "youtube"
+    }
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "language": {
+    "title": "Language"
+  }
+}

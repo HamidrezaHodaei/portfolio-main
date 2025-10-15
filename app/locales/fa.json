@@ -1,0 +1,29 @@
+{
+  "menu": {
+    "title": "منو",
+    "open": "منو",
+    "home": "خانه",
+    "blog": "بلاگ",
+    "about": "درباره",
+    "location": {
+      "title": "من کجا هستم؟",
+      "address": "آدرس من ۱۲۳"
+    },
+    "contact": {
+      "title": "تماس",
+      "email": "andrewwoan@gmail.com"
+    },
+    "social": {
+      "title": "من را دنبال کنید",
+      "twitter": "توییتر",
+      "youtube": "یوتیوب"
+    }
+  },
+  "theme": {
+    "light": "روشن",
+    "dark": "تاریک"
+  },
+  "language": {
+    "title": "زبان"
+  }
+}
