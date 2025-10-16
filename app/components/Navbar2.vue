@@ -1,18 +1,19 @@
 <template>
   <div class="menu-wrapper">
-    
-
     <!-- Toggle Button - Fixed Position -->
-    <div 
+    <button 
       ref="toggleBtn"
       @click="handleToggle"
       class="toggle-button"
+      :aria-label="isOpen ? 'Close menu' : 'Open menu'"
+      :aria-expanded="isOpen"
+      type="button"
     >
-      <div class="btn-outline btn-outline-1"></div>
-      <div class="btn-outline btn-outline-2"></div>
+      <div class="btn-outline btn-outline-1" aria-hidden="true"></div>
+      <div class="btn-outline btn-outline-2" aria-hidden="true"></div>
       
       <!-- Hamburger Icon -->
-      <div class="icon-wrapper">
+      <div class="icon-wrapper" aria-hidden="true">
         <div class="hamburger-line hamburger-line-1"></div>
         <div class="hamburger-line hamburger-line-2"></div>
         <div class="hamburger-line hamburger-line-3"></div>
@@ -23,10 +24,10 @@
           <div class="close-line-2"></div>
         </div>
       </div>
-    </div>
+    </button>
 
     <!-- Overlay SVG -->
-    <div class="menu-overlay">
+    <div class="menu-overlay" :class="{ 'is-active': isOpen }">
       <svg viewBox="0 0 1000 1000" preserveAspectRatio="none" class="overlay-svg">
         <path 
           ref="menuPath"
@@ -37,25 +38,30 @@
     </div>
 
     <!-- Menu -->
-    <div 
+    <nav 
       ref="menu"
       class="menu-container"
+      :class="{ 'is-visible': isOpen }"
+      role="navigation"
+      aria-label="Main navigation"
     >
       <!-- Primary Menu -->
       <div class="primary-menu">
         <div 
-          v-for="item in primaryMenu" 
+          v-for="(item, index) in primaryMenu" 
           :key="item.id"
           class="menu-item-wrapper"
+          :style="{ '--item-index': index }"
         >
           <NuxtLink 
             :to="item.link"
             class="menu-link primary-link hover-effect-text"
             @click="handleToggle"
+            tabindex="0"
           >
             <span v-if="item.number" class="link-number">{{ item.number }}</span>
             <span class="text-main">{{ item.text }}</span>
-            <span class="text-hover">{{ item.text }}</span>
+            <span class="text-hover" aria-hidden="true">{{ item.text }}</span>
           </NuxtLink>
         </div>
       </div>
@@ -65,14 +71,16 @@
         <!-- Top Links -->
         <div class="secondary-top">
           <div 
-            v-for="item in secondaryMenuTop" 
+            v-for="(item, index) in secondaryMenuTop" 
             :key="item.id"
             class="menu-item-wrapper"
+            :style="{ '--item-index': index + 3 }"
           >
             <NuxtLink 
               :to="item.link"
               class="menu-link secondary-link"
               @click="handleToggle"
+              tabindex="0"
             >
               {{ item.text }}
             </NuxtLink>
@@ -81,57 +89,61 @@
         
         <!-- Social Links -->
         <div class="secondary-bottom">
-          <div class="menu-item-wrapper">
+          <div class="menu-item-wrapper" :style="{ '--item-index': 6 }">
             <p class="menu-link connect-text">
               Connect with me
             </p>
           </div>
           
           <div 
-            v-for="social in socialLinks" 
+            v-for="(social, index) in socialLinks" 
             :key="social.id"
             class="menu-item-wrapper"
+            :style="{ '--item-index': index + 7 }"
           >
             <a 
               :href="social.link"
               target="_blank"
               rel="noopener noreferrer"
               class="menu-link social-link"
+              :aria-label="`Visit ${social.text}`"
+              tabindex="0"
             >
-              <span class="social-icon" v-html="social.icon"></span>
+              <span class="social-icon" v-html="social.icon" aria-hidden="true"></span>
               <span>{{ social.text }}</span>
             </a>
           </div>
 
           <!-- Bottom Links -->
           <div 
-            v-for="item in secondaryMenuBottom" 
+            v-for="(item, index) in secondaryMenuBottom" 
             :key="item.id"
             class="menu-item-wrapper credits-wrapper"
+            :style="{ '--item-index': index + 10 }"
           >
             <NuxtLink 
               :to="item.link"
-              class="menu-link secondary-link"
+              class="menu-link secondary-link credits-link"
               @click="handleToggle"
+              tabindex="0"
             >
               {{ item.text }}
             </NuxtLink>
           </div>
         </div>
       </div>
-    </div>
+    </nav>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { gsap } from 'gsap'
 
 // Refs
 const toggleBtn = ref(null)
 const menuPath = ref(null)
 const closeIcon = ref(null)
-const heroTitle = ref(null)
 const menu = ref(null)
 const isOpen = ref(false)
 let tl = null
@@ -177,8 +189,17 @@ const socialLinks = [
 ]
 
 const secondaryMenuBottom = [
-  { id: 1, text: '© 2025 Hamidreza Hodaei. All rights reserved.', link: '/copyright' },
+  { id: 1, text: '© 2025 Hamidreza Hodaei. All rights reserved.', link: '#' },
 ]
+
+// Handle body scroll lock
+watch(isOpen, (newValue) => {
+  if (newValue) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
+})
 
 // Handle Toggle
 const handleToggle = () => {
@@ -193,7 +214,17 @@ const handleToggle = () => {
   isOpen.value = !isOpen.value
 }
 
+// Handle Escape key
+const handleEscape = (e) => {
+  if (e.key === 'Escape' && isOpen.value) {
+    handleToggle()
+  }
+}
+
 onMounted(() => {
+  // Add keyboard listener
+  window.addEventListener('keydown', handleEscape)
+  
   // Create Timeline
   tl = gsap.timeline({ paused: true })
   
@@ -236,13 +267,6 @@ onMounted(() => {
     ease: "power1.out",
   }, 0)
   
-  .to(heroTitle.value, {
-    opacity: 0,
-    y: 20,
-    duration: 0.5,
-    ease: "power1.out"
-  }, 0)
-  
   .to(menuPath.value, {
     attr: { d: startPath },
     duration: 0.8,
@@ -266,6 +290,10 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  // Cleanup
+  window.removeEventListener('keydown', handleEscape)
+  document.body.style.overflow = ''
+  
   if (tl) {
     tl.kill()
   }
@@ -275,76 +303,15 @@ onUnmounted(() => {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
-/* Global Styles */
-
-
-/* Hero Title */
-.hero-title {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90%;
-  text-align: center;
-  font-size: clamp(2rem, 8vw, 6rem);
-  font-family: 'Playfair Display', serif;
-  font-weight: 900;
-  text-transform: uppercase;
-  z-index: 1;
-  pointer-events: none;
-  line-height: 1.4;
-}
-
-.static-text {
-  display: inline-block;
-  margin-left: 0.3em;
-}
-
-/* Flip Animation Styles */
-#flip {
-  height: 1.25em;
-  overflow: hidden;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 1.25;
+/* Menu Wrapper */
+.menu-wrapper {
   position: relative;
-}
-
-#flip > div {
-  position: relative;
-}
-
-#flip > div > div {
-  color: #fff;
-  padding: 0.1em 0.4em;
-  height: 1.2em;
-  margin-bottom: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #0a0a0a;
-  border-radius: 0.15em;
-  box-shadow: 0;
-  line-height: 1.2;
-}
-
-#flip > div:first-child {
-  animation: show 15s ease-in-out infinite;
-}
-
-@keyframes show {
-  0% { margin-top: -2.5em; }
-  10% { margin-top: -2.5em; }
-  20% { margin-top: -1.25em; }
-  45% { margin-top: -1.25em; }
-  55% { margin-top: 0em; }
-  95% { margin-top: 0em; }
-  100% { margin-top: -2.5em; }
+  z-index: 9000;
 }
 
 /* Toggle Button - Always Fixed */
 .toggle-button {
-  position: fixed !important;
+  position: fixed;
   top: 2rem;
   right: 2rem;
   width: 100px;
@@ -352,8 +319,22 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100;
+  z-index: 9999;
   cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.3s ease;
+}
+
+.toggle-button:active {
+  transform: scale(0.95);
+}
+
+.toggle-button:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 8px;
 }
 
 .btn-outline {
@@ -362,6 +343,7 @@ onUnmounted(() => {
   height: 100px;
   border: 1px solid #ffffff;
   pointer-events: none;
+  will-change: width, height, border-color;
 }
 
 .btn-outline-1 {
@@ -394,6 +376,7 @@ onUnmounted(() => {
   height: 2px;
   background-color: #ffffff;
   left: 0;
+  transition: background-color 0.3s ease;
 }
 
 .hamburger-line-1 {
@@ -445,8 +428,14 @@ onUnmounted(() => {
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 50;
+  z-index: 9900;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.menu-overlay.is-active {
+  opacity: 1;
 }
 
 .overlay-svg {
@@ -462,23 +451,16 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   display: flex;
-  z-index: 60;
+  z-index: 9950;
   visibility: hidden;
-  padding: 10vh 5vw;
-  gap: 5vw;
+  padding: clamp(80px, 10vh, 120px) clamp(20px, 5vw, 80px);
+  gap: clamp(20px, 5vw, 80px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-@media (max-width: 768px) {
-  .menu-container {
-    flex-direction: column;
-    padding: 15vh 8vw;
-  }
-  
-  .static-text {
-    display: block;
-    margin-left: 0;
-    margin-top: 0.5rem;
-  }
+.menu-container.is-visible {
+  pointer-events: auto;
 }
 
 /* Primary Menu */
@@ -487,17 +469,12 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-@media (max-width: 768px) {
-  .primary-menu {
-    margin-bottom: 4rem;
-  }
+  min-width: 0;
 }
 
 .menu-item-wrapper {
   overflow: hidden;
-  margin-bottom: 1rem;
+  margin-bottom: clamp(0.5rem, 2vw, 1rem);
 }
 
 .menu-link {
@@ -505,20 +482,28 @@ onUnmounted(() => {
   top: 150px;
   display: block;
   text-decoration: none;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  will-change: top;
 }
 
 .menu-link:hover {
-  opacity: 0.6;
+  opacity: 0.7;
+}
+
+.menu-link:focus-visible {
+  outline: 2px solid #e2e2dc;
+  outline-offset: 4px;
+  opacity: 1;
 }
 
 .primary-link {
   text-transform: uppercase;
-  font-size: clamp(2.5rem, 8vw, 6rem);
+  font-size: clamp(2rem, 8vw, 6rem);
   font-weight: 800;
-  line-height: 1;
+  line-height: 1.1;
   font-family: 'Playfair Display', serif;
   color: #e2e2dc;
+  word-break: break-word;
 }
 
 /* Hover Effect for Primary Links */
@@ -551,14 +536,15 @@ onUnmounted(() => {
   padding-left: calc(0.25em * 4 + 1.5rem);
 }
 
-.hover-effect-text:hover .text-hover {
+.hover-effect-text:hover .text-hover,
+.hover-effect-text:focus-visible .text-hover {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
 .link-number {
   font-size: 0.25em;
   opacity: 0.5;
-  margin-right: 1.5rem;
+  margin-right: clamp(0.75rem, 2vw, 1.5rem);
   font-family: 'Inter', sans-serif;
 }
 
@@ -568,19 +554,27 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-width: 0;
+}
+
+.secondary-top,
+.secondary-bottom {
+  display: flex;
+  flex-direction: column;
 }
 
 .secondary-link {
   font-family: 'Inter', sans-serif;
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-size: clamp(0.9rem, 1.5vw, 1.25rem);
   font-weight: 300;
   color: #e2e2dc;
   margin-bottom: 0.5rem;
+  word-break: break-word;
 }
 
 .connect-text {
   font-family: 'Inter', sans-serif;
-  font-size: clamp(0.875rem, 1.2vw, 1rem);
+  font-size: clamp(0.75rem, 1.2vw, 1rem);
   font-weight: 300;
   color: #e2e2dc;
   opacity: 0.6;
@@ -590,30 +584,148 @@ onUnmounted(() => {
 /* Social Links */
 .social-link {
   font-family: 'Inter', sans-serif;
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-size: clamp(0.9rem, 1.5vw, 1.25rem);
   font-weight: 300;
   color: #e2e2dc;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: clamp(0.5rem, 1vw, 0.75rem);
   margin-bottom: 0.75rem;
 }
 
 .social-icon {
-  width: 24px;
-  height: 24px;
+  width: clamp(20px, 3vw, 24px);
+  height: clamp(20px, 3vw, 24px);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease;
   color: #e2e2dc;
+  flex-shrink: 0;
 }
 
-.social-link:hover .social-icon {
-  transform: scale(1.1);
+.social-link:hover .social-icon,
+.social-link:focus-visible .social-icon {
+  transform: scale(1.15) rotate(5deg);
 }
 
 .credits-wrapper {
-  margin-top: 1.5rem;
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+}
+
+.credits-link {
+  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+  opacity: 0.7;
+}
+
+/* ============================= */
+/* Responsive Design */
+/* ============================= */
+@media (max-width: 1024px) {
+  .toggle-button {
+    width: 80px;
+    height: 80px;
+    top: 1.5rem;
+    right: 1.5rem;
+  }
+  
+  .btn-outline {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .icon-wrapper {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-container {
+    flex-direction: column;
+    padding: 100px 6vw 40px;
+    gap: clamp(30px, 8vw, 60px);
+  }
+  
+  .primary-menu {
+    justify-content: flex-start;
+  }
+  
+  .secondary-menu {
+    justify-content: flex-start;
+    gap: clamp(20px, 5vw, 40px);
+  }
+  
+  .toggle-button {
+    width: 70px;
+    height: 70px;
+    top: 1.25rem;
+    right: 1.25rem;
+  }
+  
+  .btn-outline {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-container {
+    padding: 90px 5vw 30px;
+  }
+  
+  .toggle-button {
+    width: 60px;
+    height: 60px;
+    top: 1rem;
+    right: 1rem;
+  }
+  
+  .btn-outline {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .icon-wrapper {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .hamburger-line {
+    height: 1.5px;
+  }
+  
+  .close-icon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .close-line-1,
+  .close-line-2 {
+    height: 1.5px;
+  }
+}
+
+/* ============================= */
+/* Reduced Motion */
+/* ============================= */
+@media (prefers-reduced-motion: reduce) {
+  .btn-outline-1 {
+    animation: none;
+  }
+  
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ============================= */
+/* Print Styles */
+/* ============================= */
+@media print {
+  .menu-wrapper {
+    display: none;
+  }
 }
 </style>

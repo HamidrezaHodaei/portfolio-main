@@ -287,14 +287,53 @@ onUnmounted(() => {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
-/* Global Styles */
+/* Global Styles - FIX ZOOM ISSUE */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+  /* Prevent horizontal scroll on zoom */
+  overscroll-behavior-x: none;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  /* Prevent horizontal scroll */
+  overscroll-behavior-x: none;
+}
+
 .menu-wrapper {
   width: 100%;
+  min-width: 100%;
   height: 100vh;
+  min-height: 100vh;
   background-color: #e5e3dc;
   color: #0a0a0a;
   position: relative;
   overflow: hidden;
+  /* Extend background to cover any overflow */
+  margin: 0;
+  padding: 0;
+}
+
+/* Prevent white edges on zoom */
+.menu-wrapper::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  background-color: #e5e3dc;
+  z-index: -1;
 }
 
 /* Hero Title */
@@ -304,6 +343,7 @@ onUnmounted(() => {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90%;
+  max-width: 100%;
   text-align: center;
   font-size: clamp(2rem, 8vw, 6rem);
   font-family: 'Playfair Display', serif;
@@ -361,11 +401,11 @@ onUnmounted(() => {
   100% { margin-top: -2.5em; }
 }
 
-/* Toggle Button - Always Fixed */
+/* Toggle Button - Fixed with Safe Area */
 .toggle-button {
   position: fixed !important;
-  top: 2rem;
-  right: 2rem;
+  top: max(2rem, env(safe-area-inset-top, 2rem));
+  right: max(2rem, env(safe-area-inset-right, 2rem));
   width: 100px;
   height: 100px;
   display: flex;
@@ -373,6 +413,8 @@ onUnmounted(() => {
   align-items: center;
   z-index: 100;
   cursor: pointer;
+  /* Prevent zoom issues */
+  touch-action: manipulation;
 }
 
 .btn-outline {
@@ -457,13 +499,14 @@ onUnmounted(() => {
   transform: rotate(-45deg);
 }
 
-/* Overlay SVG */
+/* Overlay SVG - Extended Width */
 .menu-overlay {
   position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
+  width: 200vw;
+  height: 200vh;
+  top: -50vh;
+  left: -50vw;
+  right: -50vw;
   z-index: 50;
   pointer-events: none;
 }
@@ -471,26 +514,47 @@ onUnmounted(() => {
 .overlay-svg {
   width: 100%;
   height: 100%;
+  display: block;
 }
 
-/* Menu Container */
-.menu-container {
-  position: fixed;
+/* Background extension for overlay */
+.menu-overlay::before {
+  content: '';
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
+  background-color: #0a0a0a;
+  z-index: -1;
+  opacity: 0;
+}
+
+/* Menu Container - Extended with Safe Areas */
+.menu-container {
+  position: fixed;
+  top: -10vh;
+  left: -10vw;
+  right: -10vw;
+  bottom: -10vh;
+  width: 120vw;
+  height: 120vh;
   display: flex;
   z-index: 60;
   visibility: hidden;
-  padding: 10vh 5vw;
+  padding: max(20vh, env(safe-area-inset-top, 20vh)) max(15vw, env(safe-area-inset-right, 15vw)) max(15vh, env(safe-area-inset-bottom, 15vh)) max(15vw, env(safe-area-inset-left, 15vw));
   gap: 5vw;
+  box-sizing: border-box;
+  background-color: #0a0a0a;
 }
 
 @media (max-width: 768px) {
   .menu-container {
     flex-direction: column;
-    padding: 15vh 8vw;
+    padding: max(20vh, env(safe-area-inset-top, 20vh)) max(15vw, env(safe-area-inset-right, 15vw)) max(10vh, env(safe-area-inset-bottom, 10vh)) max(15vw, env(safe-area-inset-left, 15vw));
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
   
   .static-text {
@@ -506,11 +570,13 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 0;
 }
 
 @media (max-width: 768px) {
   .primary-menu {
     margin-bottom: 4rem;
+    flex-shrink: 0;
   }
 }
 
@@ -525,6 +591,8 @@ onUnmounted(() => {
   display: block;
   text-decoration: none;
   transition: opacity 0.3s ease;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .menu-link:hover {
@@ -587,6 +655,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-width: 0;
 }
 
 .secondary-link {
@@ -595,6 +664,7 @@ onUnmounted(() => {
   font-weight: 300;
   color: #e2e2dc;
   margin-bottom: 0.5rem;
+  word-wrap: break-word;
 }
 
 .connect-text {
@@ -626,6 +696,7 @@ onUnmounted(() => {
   justify-content: center;
   transition: transform 0.3s ease;
   color: #e2e2dc;
+  flex-shrink: 0;
 }
 
 .social-link:hover .social-icon {
@@ -634,5 +705,12 @@ onUnmounted(() => {
 
 .credits-wrapper {
   margin-top: 1.5rem;
+}
+
+/* Viewport Meta Fix - Add to nuxt.config if not present */
+@supports (-webkit-touch-callout: none) {
+  .menu-wrapper {
+    min-height: -webkit-fill-available;
+  }
 }
 </style>

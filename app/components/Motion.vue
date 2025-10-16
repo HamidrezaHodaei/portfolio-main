@@ -59,14 +59,14 @@
     </section>
 
     <!-- Website Content Section -->
-    <section class="relative w-full h-[80vh] bg-white z-10">
+    <section class="relative w-full h-[140vh] bg-white z-10">
       <h1 class="text-[72px] tracking-normal uppercase font-normal pt-20 px-8">
         VIEW PROJECTS. SEE THE PROCESS. HIRE THE ARCHITECT.
       </h1>
     </section>
 
     <!-- Canyon Slider Section - بعد از Motion -->
-    <section class="relative w-full h-screen z-20">
+    <section class="relative w-full h-[120vh] z-20">
       <div class="slider-main">
         <div class="slider-container">
           <div 
@@ -171,27 +171,27 @@ const slides = [
   {
     title: 'Digital Innovation',
     context: 'Crafting exceptional digital experiences through cutting-edge design and technology. Where creativity meets functionality in perfect harmony.',
-    image: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=1920&q=80'
+    image: '/1.jpeg'
   },
   {
     title: 'Creative Vision',
     context: 'Transforming bold ideas into stunning realities. We blend artistic vision with strategic thinking to create memorable brand experiences.',
-    image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1920&q=80'
+    image: '/2.jpeg'
   },
   {
     title: 'Future Forward',
     context: 'Pioneering tomorrow\'s digital landscape today. Innovation-driven solutions that push boundaries and redefine industry standards.',
-    image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1920&q=80'
+    image: '/3.jpeg'
   },
   {
     title: 'Design Excellence',
     context: 'Award-winning design that captivates and converts. Every pixel crafted with precision, every interaction designed with purpose.',
-    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1920&q=80'
+    image: '/4.jpeg'
   },
   {
     title: 'User Experience',
     context: 'Interface design that evokes emotions and engages users. Every detail crafted to create an unparalleled experience.',
-    image: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=1920&q=80'
+    image: '/5.jpeg'
   }
 ]
 
@@ -235,7 +235,9 @@ const scroll = () => {
 }
 
 const handleWheel = (e) => {
+  e.preventDefault()
   e.stopPropagation()
+  
   if ((currentIndex.value <= 0 && e.deltaY < 0) || (currentIndex.value >= slides.length - 1 && e.deltaY > 0)) {
     return
   }
@@ -319,6 +321,11 @@ onMounted(() => {
 
   // Register ScrollTrigger
   gsap.registerPlugin(ScrollTrigger)
+
+  // غیرفعال کردن Lenis روی slider
+  if (slider.value) {
+    slider.value.setAttribute('data-lenis-prevent', '')
+  }
 
   // افکت اسکرول برای هر خط متن
   const lines = gsap.utils.toArray('.scroll-line')
@@ -527,6 +534,7 @@ onBeforeUnmount(() => {
   height: 100%;
   position: relative;
   overflow: hidden;
+  overscroll-behavior: contain;
 }
 
 .slider-container {
@@ -591,6 +599,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
   scroll-behavior: smooth;
   overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
 .canyon-slider::-webkit-scrollbar {
