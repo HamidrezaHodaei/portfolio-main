@@ -88,7 +88,7 @@ const handleSubmit = () => {
 /* Main Ring */
 /* ============================= */
 .ring {
-  position: relative;
+  position: fixed;
   width: 600px;
   height: 520px;
   display: flex;
@@ -137,7 +137,7 @@ const handleSubmit = () => {
 /* Form Box */
 /* ============================= */
 .form-box {
-  position: absolute;
+  position: fixed;
   width: 500px;
   height: 100%;
   display: flex;

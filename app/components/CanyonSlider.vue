@@ -2,20 +2,20 @@
   <div class="main">
     <div class="container">
       <div 
-        ref="normalSlider" 
-        class="slider normal"
-        @wheel="handleWheel($event, 'normal')"
-        @touchstart="handleTouchStart($event, 'normal')"
-        @touchend="handleTouchEnd($event, 'normal')"
+        ref="slider" 
+        class="slider"
+        @wheel="handleWheel"
+        @touchstart="handleTouchStart"
+        @touchend="handleTouchEnd"
       >
         <div 
           v-for="(slide, index) in slides" 
           :key="index" 
           class="slide"
-          :class="{ active: normalIndex === index }"
+          :class="{ active: currentIndex === index }"
         >
           <div class="content">
-            <div class="custom-component component normal">
+            <div class="custom-component">
               <h3 class="intro">Explore</h3>
               <h2 class="title">{{ slide.title }}</h2>
               <p class="context">{{ slide.context }}</p>
@@ -28,113 +28,44 @@
         </div>
       </div>
 
-      <div class="indicator normal">
+      <div class="indicator">
         <div class="line">
           <span 
             class="bar" 
-            :style="{ transform: `translate(0, ${normalIndex * 100}%)` }"
-            @mouseenter="showIndicator('normal')"
-            @mouseleave="showIndicator('normal')"
+            :style="{ transform: `translate(0, ${currentIndex * 100}%)` }"
           >
-            <span class="number" :style="{ opacity: normalNumberOpacity }">
-              {{ String(normalIndex + 1).padStart(2, '0') }}
+            <span class="number" :style="{ opacity: numberOpacity }">
+              {{ String(currentIndex + 1).padStart(2, '0') }}
             </span>
           </span>
-        </div>
-      </div>
-
-      <div class="control normal">
-        <button 
-          class="control-button prev" 
-          :class="{ disabled: normalIndex === 0 }"
-          :disabled="normalIndex === 0"
-          @click="changeSlide('normal', -1)"
-          @mouseenter="buttonEffect"
-          @mouseleave="buttonEffect"
-        >
-          <span class="hover"></span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20.75" height="11.692" viewBox="0 0 20.75 11.692">
-            <path id="path_arrow_prev" d="M175.9,229.889H165.288V235.3l-9.9-5.407,9.9-5.407v2.408" transform="translate(-155.149 -224.043)" fill="none" stroke="#fff" stroke-linejoin="bevel" stroke-width="1" fill-rule="evenodd" />
-          </svg>
-        </button>
-        <button 
-          class="control-button next" 
-          :class="{ disabled: normalIndex === slides.length - 1 }"
-          :disabled="normalIndex === slides.length - 1"
-          @click="changeSlide('normal', 1)"
-          @mouseenter="buttonEffect"
-          @mouseleave="buttonEffect"
-        >
-          <span class="hover"></span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20.75" height="11.692" viewBox="0 0 20.75 11.692">
-            <path id="path_arrow_next" d="M175.9,229.889H165.288V235.3l-9.9-5.407,9.9-5.407v2.408" transform="translate(175.899 235.735) rotate(180)" fill="none" stroke="#fff" stroke-linejoin="bevel" stroke-width="1" fill-rule="evenodd" />
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <div class="container mini">
-      <div 
-        ref="miniSlider" 
-        class="slider horizontal"
-        @wheel="handleWheel($event, 'mini')"
-        @touchstart="handleTouchStart($event, 'mini')"
-        @touchend="handleTouchEnd($event, 'mini')"
-      >
-        <div 
-          v-for="(slide, index) in slides" 
-          :key="index" 
-          class="slide"
-          :class="{ active: miniIndex === index }"
-        >
-          <div class="content">
-            <div class="custom-component component">
-              <h3 class="intro">Explore</h3>
-              <h2 class="title">{{ slide.title }}</h2>
-              <p class="context">{{ slide.context }}</p>
-              <a href="#" class="btn" role="button">View Project</a>
-            </div>
-          </div>
-          <div class="background">
-            <img :src="slide.image" alt="" class="background-img" />
-          </div>
-        </div>
-      </div>
-
-      <div class="indicator horizontal">
-        <div class="line">
-          <span 
-            class="bar" 
-            :style="{ transform: `translate(${miniIndex * 100}%, 0)` }"
-          ></span>
         </div>
       </div>
 
       <div class="control">
         <button 
           class="control-button prev" 
-          :class="{ disabled: miniIndex === 0 }"
-          :disabled="miniIndex === 0"
-          @click="changeSlide('mini', -1)"
+          :class="{ disabled: currentIndex === 0 }"
+          :disabled="currentIndex === 0"
+          @click="changeSlide(-1)"
           @mouseenter="buttonEffect"
           @mouseleave="buttonEffect"
         >
           <span class="hover"></span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20.75" height="11.692" viewBox="0 0 20.75 11.692">
-            <path id="path_arrow_prev" d="M175.9,229.889H165.288V235.3l-9.9-5.407,9.9-5.407v2.408" transform="translate(-155.149 -224.043)" fill="none" stroke="#fff" stroke-linejoin="bevel" stroke-width="1" fill-rule="evenodd" />
+            <path d="M175.9,229.889H165.288V235.3l-9.9-5.407,9.9-5.407v2.408" transform="translate(-155.149 -224.043)" fill="none" stroke="#fff" stroke-linejoin="bevel" stroke-width="1" fill-rule="evenodd" />
           </svg>
         </button>
         <button 
           class="control-button next" 
-          :class="{ disabled: miniIndex === slides.length - 1 }"
-          :disabled="miniIndex === slides.length - 1"
-          @click="changeSlide('mini', 1)"
+          :class="{ disabled: currentIndex === slides.length - 1 }"
+          :disabled="currentIndex === slides.length - 1"
+          @click="changeSlide(1)"
           @mouseenter="buttonEffect"
           @mouseleave="buttonEffect"
         >
           <span class="hover"></span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20.75" height="11.692" viewBox="0 0 20.75 11.692">
-            <path id="path_arrow_next" d="M175.9,229.889H165.288V235.3l-9.9-5.407,9.9-5.407v2.408" transform="translate(175.899 235.735) rotate(180)" fill="none" stroke="#fff" stroke-linejoin="bevel" stroke-width="1" fill-rule="evenodd" />
+            <path d="M175.9,229.889H165.288V235.3l-9.9-5.407,9.9-5.407v2.408" transform="translate(175.899 235.735) rotate(180)" fill="none" stroke="#fff" stroke-linejoin="bevel" stroke-width="1" fill-rule="evenodd" />
           </svg>
         </button>
       </div>
@@ -149,129 +80,101 @@ const slides = [
   {
     title: 'Digital Innovation',
     context: 'Crafting exceptional digital experiences through cutting-edge design and technology. Where creativity meets functionality in perfect harmony.',
-    image: 'https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=1600&q=80'
+    image: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=1920&q=80'
   },
   {
     title: 'Creative Vision',
     context: 'Transforming bold ideas into stunning realities. We blend artistic vision with strategic thinking to create memorable brand experiences.',
-    image: 'https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=1600&q=80'
+    image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1920&q=80'
   },
   {
     title: 'Future Forward',
     context: 'Pioneering tomorrow\'s digital landscape today. Innovation-driven solutions that push boundaries and redefine industry standards.',
-    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1600&q=80'
+    image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1920&q=80'
   },
   {
     title: 'Design Excellence',
     context: 'Award-winning design that captivates and converts. Every pixel crafted with precision, every interaction designed with purpose.',
-    image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600&q=80'
+    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1920&q=80'
+  },
+  {
+    title: 'User Experience',
+    context: 'Interface design that evokes emotions and engages users. Every detail crafted to create an unparalleled experience.',
+    image: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=1920&q=80'
   }
 ]
 
-const normalSlider = ref(null)
-const miniSlider = ref(null)
-const normalIndex = ref(0)
-const miniIndex = ref(0)
-const normalNumberOpacity = ref(0)
-const miniNumberOpacity = ref(0)
+const slider = ref(null)
+const currentIndex = ref(0)
+const numberOpacity = ref(0)
 
-const touchStart = ref({ normal: 0, mini: 0 })
-const timeouts = ref({ normal: null, mini: null })
-const indicatorTimeouts = ref({ normal: null, mini: null })
+const touchStart = ref(0)
+const timeout = ref(null)
+const indicatorTimeout = ref(null)
 
-const changeSlide = (type, direction) => {
-  const isNormal = type === 'normal'
-  const currentIndex = isNormal ? normalIndex : miniIndex
+const changeSlide = (direction) => {
   const newIndex = Math.max(0, Math.min(slides.length - 1, currentIndex.value + direction))
-  
-  if (isNormal) {
-    normalIndex.value = newIndex
-  } else {
-    miniIndex.value = newIndex
-  }
-  
-  scroll(type)
+  currentIndex.value = newIndex
+  scroll()
 }
 
-const scroll = (type) => {
-  const isNormal = type === 'normal'
-  const slider = isNormal ? normalSlider.value : miniSlider.value
-  const index = isNormal ? normalIndex.value : miniIndex.value
-  const isHorizontal = type === 'mini'
-  
-  if (timeouts.value[type]) {
-    clearTimeout(timeouts.value[type])
+const scroll = () => {
+  if (timeout.value) {
+    clearTimeout(timeout.value)
   }
   
-  timeouts.value[type] = setTimeout(() => {
-    const scrollAmount = isHorizontal ? slider.clientWidth * index : slider.clientHeight * index
-    
-    if (isHorizontal) {
-      slider.scrollTo({ left: scrollAmount, behavior: 'smooth' })
-    } else {
-      slider.scrollTo({ top: scrollAmount, behavior: 'smooth' })
-    }
-    
-    if (isNormal) {
-      showIndicator('normal')
-    }
+  timeout.value = setTimeout(() => {
+    const scrollAmount = slider.value.clientHeight * currentIndex.value
+    slider.value.scrollTo({ top: scrollAmount, behavior: 'smooth' })
+    showIndicator()
   }, 100)
 }
 
-const handleWheel = (e, type) => {
-  const isNormal = type === 'normal'
-  const currentIndex = isNormal ? normalIndex.value : miniIndex.value
-  
-  if ((currentIndex <= 0 && e.deltaY < 0) || (currentIndex >= slides.length - 1 && e.deltaY > 0)) {
+const handleWheel = (e) => {
+  if ((currentIndex.value <= 0 && e.deltaY < 0) || (currentIndex.value >= slides.length - 1 && e.deltaY > 0)) {
     return
   }
   
   if (e.deltaY > 0) {
-    changeSlide(type, 1)
+    changeSlide(1)
   } else if (e.deltaY < 0) {
-    changeSlide(type, -1)
+    changeSlide(-1)
   }
 }
 
-const handleTouchStart = (e, type) => {
-  const isHorizontal = type === 'mini'
-  touchStart.value[type] = isHorizontal ? e.touches[0].clientX : e.touches[0].clientY
+const handleTouchStart = (e) => {
+  touchStart.value = e.touches[0].clientY
 }
 
-const handleTouchEnd = (e, type) => {
-  const isNormal = type === 'normal'
-  const isHorizontal = type === 'mini'
-  const currentIndex = isNormal ? normalIndex.value : miniIndex.value
-  const touchEnd = isHorizontal ? e.changedTouches[0].clientX : e.changedTouches[0].clientY
-  const touchStartVal = touchStart.value[type]
+const handleTouchEnd = (e) => {
+  const touchEnd = e.changedTouches[0].clientY
+  const touchStartVal = touchStart.value
   
-  if ((currentIndex <= 0 && touchEnd > touchStartVal) || 
-      (currentIndex >= slides.length - 1 && touchEnd < touchStartVal)) {
+  if ((currentIndex.value <= 0 && touchEnd > touchStartVal) || 
+      (currentIndex.value >= slides.length - 1 && touchEnd < touchStartVal)) {
     return
   }
   
   const remainder = Math.abs(touchStartVal - touchEnd)
   if (remainder > 100) {
     if (touchEnd > touchStartVal) {
-      changeSlide(type, -1)
+      changeSlide(-1)
     } else if (touchEnd < touchStartVal) {
-      changeSlide(type, 1)
+      changeSlide(1)
     }
   }
 }
 
-const showIndicator = (type) => {
-  if (type === 'normal') {
-    normalNumberOpacity.value = 0.75
-    
-    if (indicatorTimeouts.value.normal) {
-      clearTimeout(indicatorTimeouts.value.normal)
-    }
-    
-    indicatorTimeouts.value.normal = setTimeout(() => {
-      normalNumberOpacity.value = 0
-    }, 3000)
+const showIndicator = () => {
+  numberOpacity.value = 0.75
+  
+  if (indicatorTimeout.value) {
+    clearTimeout(indicatorTimeout.value)
   }
+  
+  indicatorTimeout.value = setTimeout(() => {
+    numberOpacity.value = 0
+  }, 3000)
 }
 
 const buttonEffect = (e) => {
@@ -287,7 +190,7 @@ const buttonEffect = (e) => {
 }
 
 onMounted(() => {
-  showIndicator('normal')
+  showIndicator()
 })
 </script>
 
@@ -303,15 +206,12 @@ onMounted(() => {
   font-size: 95%;
   color: #fff;
   background: #000;
-  max-width: 1620px;
+  width: 100vw;
   height: 100vh;
-  min-height: 600px;
-  margin: auto;
-  display: flex;
-  flex-flow: row;
-  gap: 2em;
-  justify-content: space-around;
-  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
 }
 
 p {
@@ -326,20 +226,9 @@ a {
 
 .container {
   position: relative;
-  min-height: 600px;
-  max-height: 750px;
-  height: inherit;
-  flex: 1 0 75%;
-  margin: auto;
-  border-radius: 1.5em;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  box-shadow: -42px 32px 65px -2px rgba(0, 0, 0, 0.8);
-  z-index: 1;
-}
-
-.container.mini {
-  flex: 1 0 20%;
-  z-index: 0;
 }
 
 .custom-component {
@@ -349,38 +238,40 @@ a {
 }
 
 .custom-component .intro {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 300;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .custom-component .title {
-  font-size: 3rem;
+  font-size: 5rem;
   font-weight: 800;
   text-transform: uppercase;
-  line-height: 1;
-  margin-bottom: 16px;
+  line-height: 1.1;
+  margin-bottom: 24px;
 }
 
 .custom-component .context {
-  margin-bottom: 32px;
+  margin-bottom: 40px;
+  max-width: 600px;
+  font-size: 1.1rem;
 }
 
 .custom-component .btn {
   display: inline-block;
-  padding: 1em 2em;
+  padding: 1.2em 2.5em;
   background-color: #fff;
   color: #000;
   text-transform: uppercase;
   font-weight: 800;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
 }
 
-.custom-component.normal .intro {
-  font-size: 1.75rem;
-}
-
-.custom-component.normal .title {
-  font-size: 5rem;
+.custom-component .btn:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
 }
 
 .slider {
@@ -403,22 +294,19 @@ a {
   scrollbar-width: none;
 }
 
-.slider.horizontal {
-  flex-flow: row nowrap;
-}
-
 .slide {
   flex: 1 0 100%;
   position: relative;
+  min-height: 100vh;
 }
 
 .slide::before {
   content: '';
   position: absolute;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 1) -10%, transparent 80%);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
   width: 100%;
   height: 100%;
-  z-index: 0;
+  z-index: 1;
 }
 
 .background {
@@ -427,80 +315,52 @@ a {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  z-index: -1;
+  z-index: 0;
   top: 0;
   left: 0;
 }
 
 .background-img {
   position: absolute;
-  width: auto;
+  width: 100%;
   height: 100%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  filter: grayscale(100%) contrast(1.2);
+  object-fit: cover;
+  top: 0;
+  left: 0;
+  filter: grayscale(100%) brightness(0.6) contrast(1.3);
 }
 
 .content {
-  position: relative;
-  width: auto;
-  height: 100%;
-  display: flex;
-  align-items: flex-end;
-  padding: 2em;
-  z-index: 1;
-}
-
-.content .component {
-  position: relative;
-  opacity: 0;
-  transform: translate(0, 0);
-  transition: transform 0.3s linear, opacity 0.5s ease;
-}
-
-.slide.active .content .component {
-  transition: transform 0.3s linear, opacity 2s ease;
-  opacity: 1;
-  transform: translate(0, 0%);
-}
-
-.slider.normal .slide .background .background-img {
-  width: 120%;
-  height: auto;
-}
-
-.slider.normal .slide .content {
   position: absolute;
   display: block;
   padding: 0;
   height: 100%;
-  width: 50%;
+  width: 100%;
+  z-index: 2;
 }
 
-.slider.normal .slide .content .component {
-  width: 65%;
+.content .custom-component {
+  position: absolute;
+  width: 55%;
+  max-width: 800px;
   top: 50%;
   left: 50%;
   transform: translate(-200%, -50%);
-  transition: transform 0.5s linear, opacity 2s ease;
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
 }
 
-.slider.normal .slide.active::before {
-  opacity: 1;
-  transition: transform 0.3s linear, opacity 1s ease;
-}
-
-.slider.normal .slide.active .content .component {
+.slide.active .content .custom-component {
   transform: translate(-50%, -50%);
+  opacity: 1;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.2s ease;
 }
 
 .control {
   position: absolute;
-  bottom: 0;
-  z-index: 1;
-  padding: 2em;
-  right: 0;
+  bottom: 3em;
+  left: 3em;
+  z-index: 10;
 }
 
 .control-button {
@@ -508,16 +368,16 @@ a {
   display: inline-block;
   padding: 0.25em;
   background: none;
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
   border: none;
   outline: none;
-  opacity: 0.25;
+  opacity: 0.3;
   transition: opacity 0.3s ease;
 }
 
 .control-button.next {
-  margin-left: 0.5em;
+  margin-left: 1em;
 }
 
 .control-button svg {
@@ -527,9 +387,14 @@ a {
 }
 
 .control-button svg path {
-  stroke: rgba(255, 255, 255, 0.75);
+  stroke: rgba(255, 255, 255, 0.9);
   stroke-width: 1.5px;
   transition: stroke 0.3s ease;
+}
+
+.control-button.disabled {
+  opacity: 0.15;
+  cursor: not-allowed;
 }
 
 .control-button.disabled .hover {
@@ -538,7 +403,7 @@ a {
 
 .control-button:not(.disabled) {
   cursor: pointer;
-  opacity: 0.75;
+  opacity: 0.8;
 }
 
 .control-button:not(.disabled) .hover {
@@ -546,54 +411,41 @@ a {
   top: 50%;
   left: 50%;
   border-radius: 50%;
-  width: 2.5em;
-  height: 2.5em;
-  background: rgba(255, 255, 255, 0.75);
+  width: 3.5em;
+  height: 3.5em;
+  background: rgba(255, 255, 255, 0.9);
   transform-origin: center center;
   transform: translate(-50%, -50%) scale(0, 0);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.control-button:not(.disabled):hover {
+  opacity: 1;
 }
 
 .control-button:not(.disabled):hover path {
-  stroke: rgba(0, 0, 0, 0.75);
+  stroke: rgba(0, 0, 0, 0.8);
 }
 
 .control-button:not(.disabled):hover .hover {
   transform: translate(-50%, -50%) scale(1, 1);
 }
 
-.control.normal {
-  padding: 0 3em 3em 0;
-}
-
-.control.normal .control-button {
-  width: 32px;
-  height: 32px;
-}
-
-.control.normal .control-button.next {
-  margin-left: 0.75em;
-}
-
-.control.normal .control-button:not(.disabled) .hover {
-  width: 3em;
-  height: 3em;
-}
-
 .indicator {
   position: absolute;
-  display: none;
-  right: 3em;
+  display: block;
+  right: 4em;
   top: 50%;
-  height: 40%;
+  height: 35%;
   transform: translateY(-50%);
+  z-index: 10;
 }
 
 .indicator .line {
   position: relative;
   width: 2px;
   height: 100%;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .indicator .line .bar {
@@ -601,7 +453,8 @@ a {
   background: #fff;
   top: 0;
   width: 100%;
-  transition: transform 0.5s ease;
+  height: 20%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .indicator .line .bar .number {
@@ -609,39 +462,57 @@ a {
   color: #fff;
   top: 50%;
   transform: translateY(-50%);
-  right: 1em;
-  font-size: 1.15rem;
+  right: 1.5em;
+  font-size: 1.25rem;
+  font-weight: 600;
   transition: opacity 0.5s ease;
   pointer-events: none;
 }
 
-.indicator.horizontal {
-  top: unset;
-  right: unset;
-  left: 0;
-  bottom: 0;
-  height: auto;
-  width: 100%;
-  transform: unset;
+@media (max-width: 1024px) {
+  .custom-component .title {
+    font-size: 3.5rem;
+  }
+  
+  .content .custom-component {
+    width: 70%;
+  }
+  
+  .indicator {
+    right: 2em;
+  }
+  
+  .control {
+    bottom: 2em;
+    left: 2em;
+  }
 }
 
-.indicator.horizontal .line {
-  width: 100%;
-  height: 2px;
-}
-
-.indicator.horizontal .line .bar {
-  left: 0;
-  top: unset;
-  transform: translate(0, 0);
-  height: 100%;
-}
-
-.indicator.horizontal .line .bar .number {
-  display: none;
-}
-
-.indicator.normal {
-  display: block;
+@media (max-width: 768px) {
+  .custom-component .intro {
+    font-size: 1.25rem;
+  }
+  
+  .custom-component .title {
+    font-size: 2.5rem;
+  }
+  
+  .custom-component .context {
+    font-size: 1rem;
+  }
+  
+  .content .custom-component {
+    width: 85%;
+  }
+  
+  .indicator {
+    display: none;
+  }
+  
+  .control {
+    bottom: 1.5em;
+    right: 50%;
+    transform: translateX(50%);
+  }
 }
 </style>
