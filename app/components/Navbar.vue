@@ -123,7 +123,7 @@
           >
             <NuxtLink 
               :to="item.link"
-              class="menu-link secondary-link"
+              class="menu-link secondary-link credits-link"
               @click="handleToggle"
             >
               {{ item.text }}
@@ -216,21 +216,26 @@ onMounted(() => {
   // Initial Settings
   gsap.set(menu.value, { visibility: 'hidden' })
   
+  // Check if mobile
+  const isMobile = window.innerWidth <= 768
+  const buttonSize = isMobile ? '60px' : '140px'
+  const buttonMove = isMobile ? -15 : -40
+  
   // SVG Path Values
   const startPath = "M0 502S175 272 500 272s500 230 500 230V0H0Z"
   const endPath = "M0 1005S175 1005 500 1005s500 0 500 0V0H0Z"
   
   // Build Animation
   tl.to(toggleBtn.value, {
-    x: -40,
-    y: 40,
+    x: buttonMove,
+    y: buttonMove,
     duration: 1.25,
     ease: "power4.inOut",
   }, 0)
   
   .to(btnOutlines, {
-    width: '140px',
-    height: '140px',
+    width: buttonSize,
+    height: buttonSize,
     borderColor: '#e2e2dc',
     duration: 1.25,
     ease: "power4.inOut",
@@ -287,44 +292,23 @@ onUnmounted(() => {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
-/* Global Styles - FIX ZOOM ISSUE */
+/* Global Styles */
 * {
   -webkit-tap-highlight-color: transparent;
-}
-
-html {
-  overflow-x: hidden;
-  width: 100%;
-  position: relative;
-  /* Prevent horizontal scroll on zoom */
-  overscroll-behavior-x: none;
-}
-
-body {
-  overflow-x: hidden;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  position: relative;
-  /* Prevent horizontal scroll */
-  overscroll-behavior-x: none;
+  box-sizing: border-box;
 }
 
 .menu-wrapper {
   width: 100%;
-  min-width: 100%;
   height: 100vh;
-  min-height: 100vh;
   background-color: #e5e3dc;
   color: #0a0a0a;
   position: relative;
   overflow: hidden;
-  /* Extend background to cover any overflow */
   margin: 0;
   padding: 0;
 }
 
-/* Prevent white edges on zoom */
 .menu-wrapper::before {
   content: '';
   position: fixed;
@@ -352,6 +336,7 @@ body {
   z-index: 1;
   pointer-events: none;
   line-height: 1.4;
+  padding: 0 1rem;
 }
 
 .static-text {
@@ -359,7 +344,20 @@ body {
   margin-left: 0.3em;
 }
 
-/* Flip Animation Styles */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: clamp(1.5rem, 10vw, 3rem);
+    line-height: 1.3;
+  }
+  
+  .static-text {
+    display: block;
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+}
+
+/* Flip Animation */
 #flip {
   height: 1.25em;
   overflow: hidden;
@@ -383,7 +381,6 @@ body {
   justify-content: center;
   background: #0a0a0a;
   border-radius: 0.15em;
-  box-shadow: 0;
   line-height: 1.2;
 }
 
@@ -401,28 +398,43 @@ body {
   100% { margin-top: -2.5em; }
 }
 
-/* Toggle Button - Fixed with Safe Area */
+/* Toggle Button */
 .toggle-button {
-  position: fixed !important;
-  top: max(2rem, env(safe-area-inset-top, 2rem));
-  right: max(2rem, env(safe-area-inset-right, 2rem));
-  width: 100px;
-  height: 100px;
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  width: 80px;
+  height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 100;
   cursor: pointer;
-  /* Prevent zoom issues */
   touch-action: manipulation;
+}
+
+@media (max-width: 768px) {
+  .toggle-button {
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 70px;
+    height: 70px;
+  }
 }
 
 .btn-outline {
   position: absolute;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   border: 1px solid #0a0a0a;
   pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .btn-outline {
+    width: 70px;
+    height: 70px;
+  }
 }
 
 .btn-outline-1 {
@@ -499,14 +511,13 @@ body {
   transform: rotate(-45deg);
 }
 
-/* Overlay SVG - Extended Width */
+/* Overlay SVG */
 .menu-overlay {
   position: fixed;
-  width: 200vw;
-  height: 200vh;
-  top: -50vh;
-  left: -50vw;
-  right: -50vw;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
   z-index: 50;
   pointer-events: none;
 }
@@ -517,56 +528,51 @@ body {
   display: block;
 }
 
-/* Background extension for overlay */
-.menu-overlay::before {
-  content: '';
-  position: absolute;
+/* Menu Container */
+.menu-container {
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #0a0a0a;
-  z-index: -1;
-  opacity: 0;
-}
-
-/* Menu Container - Extended with Safe Areas */
-.menu-container {
-  position: fixed;
-  top: -10vh;
-  left: -10vw;
-  right: -10vw;
-  bottom: -10vh;
-  width: 120vw;
-  height: 120vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   z-index: 60;
   visibility: hidden;
-  padding: max(20vh, env(safe-area-inset-top, 20vh)) max(15vw, env(safe-area-inset-right, 15vw)) max(15vh, env(safe-area-inset-bottom, 15vh)) max(15vw, env(safe-area-inset-left, 15vw));
+  padding: 15vh 10vw;
   gap: 5vw;
   box-sizing: border-box;
   background-color: #0a0a0a;
 }
 
+@media (max-width: 1024px) {
+  .menu-container {
+    padding: 12vh 8vw;
+    gap: 4vw;
+  }
+}
+
 @media (max-width: 768px) {
   .menu-container {
     flex-direction: column;
-    padding: max(20vh, env(safe-area-inset-top, 20vh)) max(15vw, env(safe-area-inset-right, 15vw)) max(10vh, env(safe-area-inset-bottom, 10vh)) max(15vw, env(safe-area-inset-left, 15vw));
+    padding: 15vh 8vw 8vh;
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+    gap: 3rem;
   }
-  
-  .static-text {
-    display: block;
-    margin-left: 0;
-    margin-top: 0.5rem;
+}
+
+@media (max-width: 480px) {
+  .menu-container {
+    padding: 12vh 6vw 6vh;
   }
 }
 
 /* Primary Menu */
 .primary-menu {
-  flex: 3;
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -575,14 +581,20 @@ body {
 
 @media (max-width: 768px) {
   .primary-menu {
-    margin-bottom: 4rem;
+    justify-content: flex-start;
     flex-shrink: 0;
   }
 }
 
 .menu-item-wrapper {
   overflow: hidden;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .menu-item-wrapper {
+    margin-bottom: 0.75rem;
+  }
 }
 
 .menu-link {
@@ -601,11 +613,18 @@ body {
 
 .primary-link {
   text-transform: uppercase;
-  font-size: clamp(2.5rem, 8vw, 6rem);
+  font-size: clamp(2rem, 6vw, 5rem);
   font-weight: 800;
-  line-height: 1;
+  line-height: 1.1;
   font-family: 'Playfair Display', serif;
   color: #e2e2dc;
+}
+
+@media (max-width: 768px) {
+  .primary-link {
+    font-size: clamp(2rem, 10vw, 3.5rem);
+    line-height: 1;
+  }
 }
 
 /* Hover Effect for Primary Links */
@@ -651,11 +670,28 @@ body {
 
 /* Secondary Menu */
 .secondary-menu {
-  flex: 2;
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .secondary-menu {
+    flex-shrink: 0;
+    gap: 2rem;
+  }
+}
+
+.secondary-top {
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .secondary-top {
+    margin-bottom: 0;
+  }
 }
 
 .secondary-link {
@@ -667,13 +703,27 @@ body {
   word-wrap: break-word;
 }
 
+@media (max-width: 768px) {
+  .secondary-link {
+    font-size: clamp(1.1rem, 4vw, 1.5rem);
+    margin-bottom: 0.75rem;
+  }
+}
+
 .connect-text {
   font-family: 'Inter', sans-serif;
   font-size: clamp(0.875rem, 1.2vw, 1rem);
   font-weight: 300;
   color: #e2e2dc;
   opacity: 0.6;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .connect-text {
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+  }
 }
 
 /* Social Links */
@@ -688,6 +738,14 @@ body {
   margin-bottom: 0.75rem;
 }
 
+@media (max-width: 768px) {
+  .social-link {
+    font-size: clamp(1.1rem, 4vw, 1.5rem);
+    margin-bottom: 1rem;
+    gap: 1rem;
+  }
+}
+
 .social-icon {
   width: 24px;
   height: 24px;
@@ -699,15 +757,72 @@ body {
   flex-shrink: 0;
 }
 
+@media (max-width: 768px) {
+  .social-icon {
+    width: 28px;
+    height: 28px;
+  }
+}
+
 .social-link:hover .social-icon {
   transform: scale(1.1);
 }
 
 .credits-wrapper {
-  margin-top: 1.5rem;
+  margin-top: 2rem;
 }
 
-/* Viewport Meta Fix - Add to nuxt.config if not present */
+@media (max-width: 768px) {
+  .credits-wrapper {
+    margin-top: 1.5rem;
+  }
+}
+
+.credits-link {
+  font-size: clamp(0.75rem, 1vw, 0.875rem);
+  opacity: 0.7;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .credits-link {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+
+/* iOS Safe Area Support */
+@supports (padding: max(0px)) {
+  .menu-container {
+    padding-top: max(15vh, env(safe-area-inset-top));
+    padding-right: max(10vw, env(safe-area-inset-right));
+    padding-bottom: max(10vh, env(safe-area-inset-bottom));
+    padding-left: max(10vw, env(safe-area-inset-left));
+  }
+  
+  .toggle-button {
+    top: max(2rem, env(safe-area-inset-top));
+    right: max(2rem, env(safe-area-inset-right));
+  }
+}
+
+@media (max-width: 768px) {
+  @supports (padding: max(0px)) {
+    .menu-container {
+      padding-top: max(15vh, env(safe-area-inset-top));
+      padding-right: max(8vw, env(safe-area-inset-right));
+      padding-bottom: max(8vh, env(safe-area-inset-bottom));
+      padding-left: max(8vw, env(safe-area-inset-left));
+    }
+    
+    .toggle-button {
+      top: max(1.5rem, env(safe-area-inset-top));
+      right: max(1.5rem, env(safe-area-inset-right));
+    }
+  }
+}
+
+/* Viewport Height Fix for Mobile */
 @supports (-webkit-touch-callout: none) {
   .menu-wrapper {
     min-height: -webkit-fill-available;

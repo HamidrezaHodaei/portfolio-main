@@ -327,6 +327,13 @@ onMounted(() => {
     slider.value.setAttribute('data-lenis-prevent', '')
   }
 
+  // Refresh ScrollTrigger در تغییر سایز
+  const handleResize = () => {
+    ScrollTrigger.refresh()
+  }
+  
+  window.addEventListener('resize', handleResize)
+
   // افکت اسکرول برای هر خط متن
   const lines = gsap.utils.toArray('.scroll-line')
   lines.forEach(line => {
@@ -357,6 +364,7 @@ onMounted(() => {
       end: 'bottom top',
       pin: true,
       pinSpacing: false,
+      invalidateOnRefresh: true,
     })
   )
 
@@ -369,6 +377,7 @@ onMounted(() => {
       end: 'bottom top',
       pin: true,
       pinSpacing: false,
+      invalidateOnRefresh: true,
     })
   )
 
@@ -439,6 +448,12 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  // پاک کردن event listener
+  const handleResize = () => {
+    ScrollTrigger.refresh()
+  }
+  window.removeEventListener('resize', handleResize)
+  
   scrollTriggers.forEach(trigger => trigger.kill())
   scrollTriggers = []
   
@@ -906,5 +921,16 @@ html.lenis body {
 
 .lenis.lenis-smooth iframe {
   pointer-events: none;
+}
+
+/* Fix برای pin-spacer */
+.pin-spacer {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.pin-spacer > * {
+  width: 100% !important;
+  max-width: 100% !important;
 }
 </style>

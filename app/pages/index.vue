@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'min-h-screen transition-colors duration-300 relative', // ⬅️ کلاس relative اضافه شد
+      'min-h-screen w-full overflow-x-hidden transition-colors duration-300 relative',
       isDark
         ? 'bg-[#121212]'
         : 'bg-gradient-to-br from-gray-50 to-gray-100',
@@ -11,8 +11,8 @@
 
     <Navbar class="" />  
     <Hero  />
-      <Motion />
-      <footer2/>
+    <Motion />
+    <footer2/>
     <div></div>
   </div>
 </template>
@@ -21,7 +21,6 @@
 import { ref, onMounted } from 'vue';
 import Motion from '~/components/Motion.vue';
 import footer2 from '~/components/footer.vue'
-// StarsCanvas و Hero به طور خودکار توسط Nuxt ایمپورت می‌شوند.
 
 const isDark = ref(true);
 
@@ -32,7 +31,6 @@ onMounted(() => {
       isDark.value = savedTheme === 'dark';
     }
 
-    // ... (منطق تغییر تم شما)
     const observer = new MutationObserver(() => {
       const theme = localStorage.getItem('theme');
       if (theme) {
