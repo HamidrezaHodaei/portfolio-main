@@ -10,10 +10,10 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 md:gap-12 lg:gap-16 mb-12 sm:mb-14 md:mb-16">
         <!-- Brand Section -->
         <div class="space-y-4 sm:space-y-5 md:space-y-6 sm:col-span-2 lg:col-span-1">
-                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">{{ t('footer.brandTitle') }}</h2>
-                <p class="text-gray-400 leading-relaxed text-sm sm:text-base max-w-sm">
-                  {{ t('footer.brandText') }}
-                </p>
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">Hamidreza Hodaei</h2>
+          <p class="text-gray-400 leading-relaxed text-sm sm:text-base max-w-sm">
+            The Intersection of Design Mastery and Full-Stack Engineering.
+          </p>
           <!-- Social Links -->
           <div class="flex gap-3 sm:gap-4 pt-2 sm:pt-4">
             <a 
@@ -49,25 +49,25 @@
         <!-- Navigation -->
         <div class="sm:flex sm:justify-center lg:justify-center">
           <div>
-            <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-5 md:mb-6 uppercase tracking-wider">{{ t('footer.navigation') }}</h3>
+            <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-5 md:mb-6 uppercase tracking-wider">Navigation</h3>
             <ul class="space-y-2 sm:space-y-3">
-              <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 text-sm sm:text-base inline-block">{{ t('menu.home') }}</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 text-sm sm:text-base inline-block">{{ t('menu.projects') }}</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 text-sm sm:text-base inline-block">{{ t('menu.aboutMe') }}</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 text-sm sm:text-base inline-block">Home</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 text-sm sm:text-base inline-block">Projects</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 text-sm sm:text-base inline-block">About Me</a></li>
             </ul>
           </div>
         </div>
 
         <!-- Contact -->
         <div class="sm:col-span-2 lg:col-span-1">
-          <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-5 md:mb-6 uppercase tracking-wider">{{ t('footer.contact') }}</h3>
+          <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-5 md:mb-6 uppercase tracking-wider">Contact</h3>
           <ul class="space-y-3 sm:space-y-4">
             <li class="flex items-start gap-2 sm:gap-3 text-gray-400 text-sm sm:text-base">
               <svg class="w-4 h-4 sm:w-5 sm:h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
               </svg>
-              <span>{{ t('footer.location') }}</span>
+              <span>Iran, Tehran</span>
             </li>
             <li class="flex items-start gap-2 sm:gap-3 text-gray-400 text-sm sm:text-base">
               <svg class="w-4 h-4 sm:w-5 sm:h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,8 +84,8 @@
       <!-- Newsletter Section -->
       <div class="border-t border-b border-gray-800 py-8 sm:py-10 md:py-12">
         <div class="max-w-2xl mx-auto text-center">
-          <h3 class="text-xl sm:text-2xl font-semibold mb-2 sm:mb-3">{{ t('footer.letsWork') }}</h3>
-          <p class="text-gray-400 mb-5 sm:mb-6 text-sm sm:text-base px-4">{{ t('footer.notifyText') }}</p>
+          <h3 class="text-xl sm:text-2xl font-semibold mb-2 sm:mb-3">Let's Work Together</h3>
+          <p class="text-gray-400 mb-5 sm:mb-6 text-sm sm:text-base px-4">Get notified about new projects and professional updates</p>
           <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto px-4">
             <input 
               type="email" 
@@ -96,7 +96,7 @@
               type="submit"
               class="px-6 sm:px-8 py-2.5 sm:py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 active:scale-95 text-sm uppercase tracking-wider whitespace-nowrap"
             >
-              {{ t('footer.notifyButton') }}
+              Notify Me
             </button>
           </form>
         </div>
@@ -105,14 +105,14 @@
       <!-- Bottom Section -->
       <div class="pt-8 sm:pt-10 md:pt-12 flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6">
         <p class="text-gray-500 text-xs sm:text-sm text-center md:text-left order-2 md:order-1">
-          {{ t('footer.copy') }}
+          © 2026 Hamidreza Hodaei. All rights reserved.
         </p>
         <div class="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs sm:text-sm order-1 md:order-2">
-          <a href="#" class="text-gray-500 hover:text-white transition-colors whitespace-nowrap">{{ t('footer.legalNotice') }}</a>
+          <a href="#" class="text-gray-500 hover:text-white transition-colors whitespace-nowrap">Legal Notice</a>
           <span class="text-gray-700">|</span>
-          <a href="#" class="text-gray-500 hover:text-white transition-colors whitespace-nowrap">{{ t('footer.cookiePolicy') }}</a>
+          <a href="#" class="text-gray-500 hover:text-white transition-colors whitespace-nowrap">Cookie Policy</a>
           <span class="text-gray-700">|</span>
-          <a href="#" class="text-gray-500 hover:text-white transition-colors whitespace-nowrap">{{ t('footer.privacy') }}</a>
+          <a href="#" class="text-gray-500 hover:text-white transition-colors whitespace-nowrap">Privacy</a>
         </div>
       </div>
     </div>
@@ -123,8 +123,7 @@
 </template>
 
 <script setup>
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
+// No script needed for this component
 </script>
 
 <style scoped>
