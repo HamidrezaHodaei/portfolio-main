@@ -17,7 +17,7 @@
           <!-- Social Links -->
           <div class="flex gap-3 sm:gap-4 pt-2 sm:pt-4">
             <a 
-              href="#" 
+              href="https://github.com/HamidrezaHodaei" 
               class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-gray-700 flex items-center justify-center hover:border-white hover:bg-white hover:text-black transition-all duration-300 active:scale-95"
               aria-label="GitHub"
             >
