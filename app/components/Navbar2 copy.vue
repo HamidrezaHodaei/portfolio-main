@@ -37,6 +37,21 @@
       </div>
     </div>
 
+    <!-- Language Toggle Button -->
+    <button
+      ref="langBtn"
+      @click="handleLanguageToggle"
+      class="lang-toggle-button"
+      :aria-label="currentLang === 'fa' ? 'Switch to English' : 'تغییر زبان به فارسی'"
+      type="button"
+    >
+      <div class="btn-outline lang-btn-outline-1" aria-hidden="true"></div>
+      <div class="btn-outline lang-btn-outline-2" aria-hidden="true"></div>
+      <div class="lang-label-wrapper" aria-hidden="true">
+        <span ref="langLabel" class="lang-label">{{ currentLang === 'fa' ? 'FA' : 'EN' }}</span>
+      </div>
+    </button>
+
     <!-- Overlay SVG -->
     <div class="menu-overlay">
       <svg viewBox="0 0 1000 1000" preserveAspectRatio="none" class="overlay-svg">
@@ -143,9 +158,12 @@ import { gsap } from 'gsap'
 const toggleBtn = ref(null)
 const menuPath = ref(null)
 const closeIcon = ref(null)
+const langBtn = ref(null)
+const langLabel = ref(null)
 const heroTitle = ref(null)
 const menu = ref(null)
 const isOpen = ref(false)
+const currentLang = ref('fa') // 'fa' | 'en'
 let tl = null
 
 // Menu Data
@@ -205,11 +223,36 @@ const handleToggle = () => {
   isOpen.value = !isOpen.value
 }
 
-onMounted(() => {
-  if (typeof document !== 'undefined') {
-    document.documentElement.lang = 'en'
-    document.documentElement.dir = 'ltr'
+// Handle Language Toggle
+const handleLanguageToggle = () => {
+  const newLang = currentLang.value === 'fa' ? 'en' : 'fa'
+
+  if (langLabel.value) {
+    gsap.to(langLabel.value, {
+      opacity: 0,
+      y: -6,
+      duration: 0.18,
+      ease: 'power1.in',
+      onComplete: () => {
+        currentLang.value = newLang
+        gsap.fromTo(
+          langLabel.value,
+          { opacity: 0, y: 6 },
+          { opacity: 1, y: 0, duration: 0.22, ease: 'power1.out' }
+        )
+      },
+    })
+  } else {
+    currentLang.value = newLang
   }
+
+  if (typeof document !== 'undefined') {
+    document.documentElement.lang = newLang
+    document.documentElement.dir = newLang === 'fa' ? 'rtl' : 'ltr'
+  }
+}
+
+onMounted(() => {
   // Create Timeline
   tl = gsap.timeline({ paused: true })
   
@@ -417,17 +460,47 @@ onUnmounted(() => {
   touch-action: manipulation;
 }
 
+.lang-toggle-button {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+  touch-action: manipulation;
+}
+
+.lang-toggle-button:hover .lang-btn-outline-2 {
+  border-color: #0a0a0a;
+}
+
+.lang-toggle-button:focus-visible,
 .toggle-button:focus-visible {
   outline: 2px solid #0a0a0a;
   outline-offset: 8px;
 }
 
 @media (max-width: 768px) {
-  .toggle-button {
+  .toggle-button,
+  .lang-toggle-button {
     top: 1.5rem;
     width: 70px;
     height: 70px;
+  }
+
+  .toggle-button {
     right: 1.5rem;
+  }
+
+  .lang-toggle-button {
+    left: 1.5rem;
   }
 }
 
@@ -453,6 +526,36 @@ onUnmounted(() => {
 
 .btn-outline-2 {
   border-radius: 53% 47% 43% 57% / 51% 39% 61% 49%;
+}
+
+.lang-btn-outline-1 {
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  animation: morph 4s linear infinite reverse;
+}
+
+.lang-btn-outline-2 {
+  border-radius: 53% 47% 43% 57% / 51% 39% 61% 49%;
+  transition: border-color 0.3s ease;
+}
+
+.lang-label-wrapper {
+  position: relative;
+  z-index: 101;
+  pointer-events: none;
+  overflow: hidden;
+  height: 1.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lang-label {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #0a0a0a;
 }
 
 @keyframes morph {
