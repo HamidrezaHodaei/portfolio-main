@@ -13,7 +13,6 @@
   "dependencies": {
     "@nuxtjs/color-mode": "^3.5.2",
     "@nuxtjs/i18n": "^10.1.1",
-    "@prisma/nuxt": "^0.3.0",
     "@studio-freight/lenis": "^1.0.42",
     "@tailwindcss/vite": "^4.1.14",
     "gsap": "^3.13.0",

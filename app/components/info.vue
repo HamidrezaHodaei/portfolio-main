@@ -14,7 +14,7 @@
       <!-- Profile Image - Hidden on mobile, shown on desktop -->
       <div class="mr-20 hidden lg:block absolute -right-[150px] top-1/2 -translate-y-1/2 w-[350px] h-[350px] rounded-full overflow-hidden border-[15px] border-black shadow-2xl z-10">
         <img 
-          src="/profile.jpg" 
+          src="/PSX.png" 
           alt="profile H.hodaei"
           class="w-full h-full object-cover grayscale"
         />
@@ -24,7 +24,7 @@
       <div class="lg:hidden flex justify-center my-8">
         <div class="w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] rounded-full overflow-hidden border-8 border-white shadow-2xl">
           <img 
-            src="/profile.jpg" 
+            src="/PSX.png" 
             alt="profile H.hodaei"
             class="w-full h-full object-cover grayscale"
           />
@@ -60,13 +60,15 @@
       <!-- Buttons with Slide Left Effect -->
       <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 items-center lg:items-start">
         <a 
-          href="#" 
+          href="/CV.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
           class="btn btn-slide-left relative px-8 sm:px-10 lg:px-11 py-[16px] sm:py-[18px] text-sm sm:text-base rounded-full border-2 border-black bg-transparent text-black font-medium overflow-hidden w-full sm:w-auto text-center"
         >
-          <span class="relative z-10">Download CV</span>
+          <span class="relative z-10">Open CV</span>
         </a>
         <a 
-          href="/form" 
+          href="#" 
           class="btn btn-slide-left btn-black relative px-8 sm:px-10 lg:px-11 py-[16px] sm:py-[18px] text-sm sm:text-base rounded-full border-2 border-black bg-black text-white font-medium overflow-hidden w-full sm:w-auto text-center"
         >
           <span class="relative z-10">Contact</span>

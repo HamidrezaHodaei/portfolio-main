@@ -7,10 +7,9 @@
         : 'bg-gradient-to-br from-gray-50 to-gray-100',
     ]"
   >
-    <StarsCanvas />
 
-    <Navbar class="" />  
-    <Hero  />
+    <Navbar  />  
+    <info  />
     <Motion />
     <footer2/>
     <div></div>
@@ -19,9 +18,10 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import Motion from '~/components/Motion.vue';
-import footer2 from '~/components/footer.vue'
-
+import Navbar from '~/components/Navbar2.vue';
+import info from '~/components/info.vue';
+import Motion from '~/components/Motion.vue'; 
+import footer2 from '~/components/footer.vue';
 const isDark = ref(true);
 
 onMounted(() => {
