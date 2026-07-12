@@ -60,7 +60,7 @@
       <!-- Buttons with Slide Left Effect -->
       <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 items-center lg:items-start">
         <a 
-          href="/CV.pdf"
+          href="#"
           target="_blank"
           rel="noopener noreferrer"
           class="btn btn-slide-left relative px-8 sm:px-10 lg:px-11 py-[16px] sm:py-[18px] text-sm sm:text-base rounded-full border-2 border-black bg-transparent text-black font-medium overflow-hidden w-full sm:w-auto text-center"
